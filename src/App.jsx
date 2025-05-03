@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoadScript } from "@react-google-maps/api";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import Signup from "./components/SignUp";
+import Signup from "./components/Signup";
 import HotelBooking from "./components/HotelBooking";
 import CarRentals from "./components/CarBooking";
 import MedicalAssistance from "./components/MedicalAssistance";
