@@ -40,5 +40,6 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN
           git_config_name: github-actions # Add git config
           git_config_email: github-actions@github.com # Add git config
