@@ -1,36 +1,40 @@
 import React, { useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
 
 const RestaurantPage = () => {
   const [searchLocation, setSearchLocation] = useState('');
   const [visible, setVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [selectedCuisine, setSelectedCuisine] = useState(null);
+
+  const cuisineOptions = [
+    { label: 'All', value: null },
+    { label: 'French', value: 'French' },
+    { label: 'Italian', value: 'Italian' },
+    { label: 'Chinese', value: 'Chinese' },
+    { label: 'Indian', value: 'Indian' },
+    { label: 'Japanese', value: 'Japanese' },
+  ];
 
   const restaurants = [
     {
       name: 'Le Gourmet',
       vicinity: '12 Rue de Paris, 75001 Paris, France',
-      photos: [
-        {
-          photo_reference: 'sample_photo_1',
-          url: 'https://source.unsplash.com/400x300/?restaurant,paris',
-        },
-      ],
+      cuisine: 'French',
+      photos: [{ photo_reference: 'sample_photo_1', url: 'https://source.unsplash.com/400x300/?restaurant,paris' }],
     },
     {
       name: 'Chez Marie',
       vicinity: '45 Boulevard Haussmann, 75009 Paris, France',
-      photos: [
-        {
-          photo_reference: 'sample_photo_2',
-          url: 'https://source.unsplash.com/400x300/?dining,france',
-        },
-      ],
+      cuisine: 'French',
+      photos: [{ photo_reference: 'sample_photo_2', url: 'https://source.unsplash.com/400x300/?dining,france' }],
     },
     {
-      name: 'Bistro Bon Appétit',
-      vicinity: '99 Avenue des Champs-Élysées, 75008 Paris, France',
+      name: 'Bella Italia',
+      vicinity: '77 Via Roma, 75008 Paris, France',
+      cuisine: 'Italian',
       photos: [],
     },
   ];
@@ -39,6 +43,11 @@ const RestaurantPage = () => {
     setSelectedRestaurant(restaurant);
     setVisible(true);
   };
+
+  // Filter by cuisine
+  const filteredRestaurants = selectedCuisine
+    ? restaurants.filter((rest) => rest.cuisine === selectedCuisine)
+    : restaurants;
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 py-6">
@@ -50,8 +59,8 @@ const RestaurantPage = () => {
         <p className="text-lg text-gray-600">Find top places to eat near your destination</p>
       </div>
 
-      {/* Search Bar (showcase only) */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+      {/* Search Bar and Cuisine Dropdown */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 px-4">
         <input
           type="text"
           placeholder="Search by city or area..."
@@ -59,17 +68,26 @@ const RestaurantPage = () => {
           onChange={(e) => setSearchLocation(e.target.value)}
           className="p-3 border border-gray-300 rounded-md w-full max-w-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
         />
+
+        <Dropdown
+          value={selectedCuisine}
+          options={cuisineOptions}
+          onChange={(e) => setSelectedCuisine(e.value)}
+          placeholder="Select Cuisine"
+          className="w-full sm:w-52"
+        />
+
         <Button
           icon="pi pi-search"
           label="Search"
           className="p-button-sm p-button-primary transition duration-300 transform hover:scale-105"
-          onClick={() => console.log('Search showcase clicked')}
+          onClick={() => console.log('Search clicked')}
         />
       </div>
 
       {/* Restaurant Cards */}
       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-        {restaurants.map((rest, index) => (
+        {filteredRestaurants.map((rest, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-lg hover:shadow-2xl overflow-hidden border transition duration-300 transform hover:-translate-y-2 hover:scale-105"
@@ -78,7 +96,7 @@ const RestaurantPage = () => {
               <img
                 src={rest.photos[0].url}
                 alt={rest.name}
-                className="w-full h-56 object-cover rounded-t-xl" // Adjusted card height
+                className="w-full h-56 object-cover rounded-t-xl"
               />
             ) : (
               <div className="w-full h-56 bg-gray-300 flex items-center justify-center text-gray-600">
@@ -91,6 +109,7 @@ const RestaurantPage = () => {
                 {rest.name}
               </h3>
               <p className="text-sm text-gray-500">{rest.vicinity}</p>
+              <p className="text-sm text-blue-600 font-medium">{rest.cuisine}</p>
 
               <div className="flex items-center justify-between mt-4">
                 <Button
@@ -131,21 +150,14 @@ const RestaurantPage = () => {
             />
           </div>
 
-          {/* Separate Date and Time Inputs */}
           <div className="flex gap-4">
             <div className="w-full">
               <label className="block text-sm font-medium text-gray-600">Date</label>
-              <input
-                type="date"
-                className="w-full p-3 border border-gray-300 rounded-md"
-              />
+              <input type="date" className="w-full p-3 border border-gray-300 rounded-md" />
             </div>
             <div className="w-full">
               <label className="block text-sm font-medium text-gray-600">Time</label>
-              <input
-                type="time"
-                className="w-full p-3 border border-gray-300 rounded-md"
-              />
+              <input type="time" className="w-full p-3 border border-gray-300 rounded-md" />
             </div>
           </div>
 
